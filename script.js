@@ -26,7 +26,7 @@ function makePageForEpisodes(episodeList) {
     //image for season episode
     const image = document.createElement("img");
     image.src = episodes.image.medium;
-    image.alt = episodeCard.name;
+    image.alt = episodes.name;
     episodeCard.appendChild(image);
     //summary for season episode
     const summary = document.createElement ("p")
