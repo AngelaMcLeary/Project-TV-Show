@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -9,16 +10,25 @@
   </head>
 
   <body>
-    <div id="root">
+
+    <div class="searchbar" >
+      <label>
+        <input type="text" id="search"  class="select" name="search" placeholder="Search here ..." />
+      </label>
     </div>
+
+    <div id="root"></div>
 
     <!-- Loads a provided function called getAllEpisodes() which returns all episodes -->
     <script src="episodes.js"></script>
-<footer><a href="https://www.tvmaze.com/">Data from TVmaze</a>
-licensed under
-<a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>
- </footer>
+    <footer>
+      <a href="https://www.tvmaze.com/">Data from TVmaze</a>
+      licensed under
+      <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>
+    </footer>
     <!-- Loads YOUR javascript code -->
     <script src="script.js"></script>
   </body>
 </html>
+
+
