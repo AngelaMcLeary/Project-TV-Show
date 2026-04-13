@@ -41,7 +41,7 @@ function makeSeasonAndEpisodes(episodes) {
 function makePageForEpisodes(episodeList) {
   const rootElem = document.getElementById('root');
   //clear previous content
-  rootElem.textContent = '';
+  rootElem.innerHTML = '';
 
   episodeList.forEach((episodes) => {
     //container for episodes
@@ -61,7 +61,7 @@ function makePageForEpisodes(episodeList) {
     //summary for season episode
     const summary = document.createElement('p');
     summary.className = 'summary';
-    summary.textContent = episodes.summary;
+    summary.innerHTML = episodes.summary;
     episodeCard.appendChild(summary);
     //add card to page containing season, episode, summary and image
     rootElem.appendChild(episodeCard);
