@@ -51,6 +51,10 @@ function makePageForEpisodes(episodeList) {
 // ---------- Search bar ---------
 function searchTopic(allEpisodes) {
   const searchInput = document.getElementById('search');
+  searchInput.value = "";
+  searchInput.dispatchEvent(new Event('input'));
+
+  document.getElementById('episodes-menu').value = "all";
 
   searchInput.addEventListener('input', (event) => {
     searchTerm = event.target.value.toLowerCase();
@@ -94,6 +98,10 @@ function setupSelector(allEpisodes){
 
   selector.addEventListener('change', (event) => {
     const selectId = event.target.value;
+    //clear search input
+    const searchInput = document.getElementById("search");
+    searchInput.value = "";
+    searchInput.dispatchEvent(new Event('input'));
 
     if(selectId === 'all'){
       makePageForEpisodes(allEpisodes);
