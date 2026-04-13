@@ -5,6 +5,8 @@ function setup() {
 
   searchTopic(allEpisodes);
   updateCount(allEpisodes.length, allEpisodes.length);
+
+  fillSelector(allEpisodes);
 }
 
 function makeSeasonAndEpisodes(episodes) {
@@ -73,6 +75,19 @@ function updateCount(found, total){
     countDisplay.textContent = `Displaying ${found}/${total} episodes`;
   }
 }
+
+function fillSelector(allEpisodes){
+  const selector = document.getElementById('episodes-menu');
+
+  allEpisodes.forEach((episode) => {
+    const option = document.createElement('option');
+    option.value = episode.id
+
+    option.textContent = `${makeSeasonAndEpisodes(episode)} - ${episode.name}`;
+    selector.appendChild(option)
+  })
+}
+
 
 window.onload = setup;
 
