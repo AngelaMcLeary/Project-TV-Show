@@ -3,32 +3,8 @@ function setup() {
   const allEpisodes = getAllEpisodes();
   makePageForEpisodes(allEpisodes);
 
-  // ---------- Search bar ---------
-  const searchInput = document.getElementById('search');
-
-  // -------displaySearchCount------
-  const countDisplay = document.getElementById('count-info');
-  if (countDisplay) {
-    countDisplay.textContent = `Displaying ${allEpisodes.length}/${allEpisodes.length} episodes`;
-  }
-
-  searchInput.addEventListener('input', (event) => {
-    searchTerm = event.target.value.toLowerCase();
-
-    const filterEpisodes = allEpisodes.filter((episode) => {
-      const nameMatch = episode.name.toLowerCase().includes(searchTerm);
-
-      // to avoid null errors and convert summary to lowercase for comparison
-      const summaryMatch = (episode.summary || '')
-        .toLowerCase()
-        .includes(searchTerm);
-      return nameMatch || summaryMatch;
-    });
-    if (countDisplay) {
-      countDisplay.textContent = `Displaying ${filterEpisodes.length}/${allEpisodes.length} episodes`;
-    }
-    makePageForEpisodes(filterEpisodes);
-  });
+  searchTopic(allEpisodes);
+  updateCount(allEpisodes.length, allEpisodes.length);
 }
 
 function makeSeasonAndEpisodes(episodes) {
@@ -69,4 +45,35 @@ function makePageForEpisodes(episodeList) {
 }
 
 
+// ---------- Search bar ---------
+function searchTopic(allEpisodes) {
+  const searchInput = document.getElementById('search');
+
+  searchInput.addEventListener('input', (event) => {
+    searchTerm = event.target.value.toLowerCase();
+
+    const filterEpisodes = allEpisodes.filter((episode) => {
+      const nameMatch = episode.name.toLowerCase().includes(searchTerm);
+
+      // to avoid null errors and convert summary to lowercase for comparison
+      const summaryMatch = (episode.summary || '')
+        .toLowerCase()
+        .includes(searchTerm);
+      return nameMatch || summaryMatch;
+    });
+    updateCount(filterEpisodes.length, allEpisodes.length);
+    makePageForEpisodes(filterEpisodes);
+  });
+}
+
+// -------displaySearchCount------
+function updateCount(found, total){
+  const countDisplay = document.getElementById('count-info');
+  if(countDisplay ){
+    countDisplay.textContent = `Displaying ${found}/${total} episodes`;
+  }
+}
+
 window.onload = setup;
+
+
