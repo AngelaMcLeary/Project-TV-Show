@@ -20,6 +20,39 @@ body {
   gap: 30px;
   align-items: start;
 }
+/* search bar */
+.searchbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgb(174, 174, 174);
+  padding: 15px 20px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+/* Inputs + dropdown */
+.select {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #949292;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+.select:focus {
+  outline: none;
+  border-color: #dde2e8;
+  box-shadow: 0 0 0 2px rgba(74,144,226,0.15);
+}
+
+/* Count text */
+#count-info {
+  font-size: 0.85rem;
+  color: #666;
+}
 
 /*Episode Card */
 .episode-card {
