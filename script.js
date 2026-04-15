@@ -53,11 +53,11 @@ function searchTopic(allEpisodes) {
   const searchInput = document.getElementById('search');
   searchInput.value = "";
   searchInput.dispatchEvent(new Event('input'));
-
+  
   document.getElementById('episodes-menu').value = "all";
 
   searchInput.addEventListener('input', (event) => {
-    searchTerm = event.target.value.toLowerCase();
+    const searchTerm = event.target.value.toLowerCase();
 
     const filterEpisodes = allEpisodes.filter((episode) => {
       const nameMatch = episode.name.toLowerCase().includes(searchTerm);
