@@ -72,6 +72,8 @@ function searchTopic(allEpisodes) {
   document.getElementById("episodes-menu").value = "all";
 
   searchInput.addEventListener("input", (event) => {
+    // reset selector every time user types
+    document.getElementById("episodes-menu").value = "all";
     const searchTerm = event.target.value.toLowerCase();
 
     const filterEpisodes = allEpisodes.filter((episode) => {
@@ -98,8 +100,10 @@ function updateCount(found, total) {
 
 function fillSelector(allEpisodes) {
   const selector = document.getElementById("episodes-menu");
+//clear selector
+  selector.innerHTML = "";
 
-  // add show all episodes in option
+  // add show all episodes in option---->>>>
   const defaultOption = document.createElement("option");
   defaultOption.value = "all";
   defaultOption.textContent = "Show all episodes";
