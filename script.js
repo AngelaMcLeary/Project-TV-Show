@@ -11,7 +11,7 @@ async function setup() {
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
-    //update all episodes to use API
+    //update convert response to JSON
     const allEpisodes = await response.json();
     // run logic logic as is
     makePageForEpisodes(allEpisodes);
