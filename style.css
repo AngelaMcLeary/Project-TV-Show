@@ -20,6 +20,20 @@ body {
   gap: 30px;
   align-items: start;
 }
+
+.message-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+  color: #555;
+  font-style: italic;
+}
+
+#count-info {
+  display: none; /* will be shown when data is loaded */
+}
+
 /* search bar */
 .searchbar {
   position: sticky;
