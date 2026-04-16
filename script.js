@@ -67,6 +67,10 @@ async function setup() {
   const rootElem = document.getElementById('root');
   const showMenu = document.getElementById('show-menu');
 
+  //clean state to avoid confusion while loading shows
+  rootElem.innerHTML =
+    '<div class="message-container"><h2>Select a show to begin...</h2></div>';
+
   try {
     // 1. Fetch all shows from TVMaze API
     const showsResponse = await fetch('https://api.tvmaze.com/shows');
@@ -80,17 +84,24 @@ async function setup() {
     // pass the shows to fill the selector with options
     fillShowsSelector(allShows);
 
-    // Initial load (Game of Thrones)
-    fetchDisplayEpisodes(82);
 
     // Listener to change episodes when a new show is selected
     showMenu.addEventListener('change', (event) => {
       const selectedShowId = event.target.value;
       if (selectedShowId !== '') {
         fetchDisplayEpisodes(selectedShowId);
-      }
+      } 
+      ///this can do the button back for to show other shows instead a button to reset the page, but I think it is more intuitive to just select another show from the dropdown
+      // else {
+      //   // Return to empty state if "Select a Show" is picked again
+      //   rootElem.innerHTML =
+      //     '<div class="message-container"><h2>Select a show to begin...</h2></div>';
+      //   const countDisplay = document.getElementById('count-info');
+      //   if (countDisplay) countDisplay.style.display = 'none';
+      // }
     });
   } catch (error) {
+    // If they select the placeholder again, show the welcome message
     rootElem.innerHTML = `<p style="color:red;">Failed to load data. Please try again later.</p>`;
     console.error('Fetch error:', error);
   }
@@ -183,21 +194,33 @@ function searchTopic(allEpisodes) {
 
 /**
  * Updates the text showing how many episodes are currently displayed
+ * and handles the visibility of the counter
  */
 function updateCount(found, total) {
   const countDisplay = document.getElementById('count-info');
   if (countDisplay) {
+    // When this function runs, we make the element visible
+    countDisplay.style.display = 'inline'; 
     countDisplay.textContent = `Displaying ${found}/${total} episodes`;
   }
 }
 
 /**
- * Populates the episode selector dropdown with the current show's episodes
+ * Populates the episode selector dropdown. 
+ * If no episodes are provided, it shows a placeholder.
  */
 function fillSelector(allEpisodes) {
   const selector = document.getElementById('episodes-menu');
   // clear selector before adding new options
   selector.innerHTML = '';
+
+
+  if (!allEpisodes || allEpisodes.length === 0) {
+    const option = document.createElement('option');
+    option.textContent = 'Wait for a show...';
+    selector.appendChild(option);
+    return;
+  }
 
   // add "Show all episodes" default option
   const defaultOption = document.createElement('option');
