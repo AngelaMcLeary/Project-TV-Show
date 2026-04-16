@@ -1,5 +1,4 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -11,9 +10,15 @@
 
   <body>
     <h1>TV Show Project</h1>
-    <div class="searchbar" >
+    <div class="searchbar">
       <label>
-        <input type="text" id="search"  class="select" name="search" placeholder="Search here ..." />
+        <input
+          type="text"
+          id="search"
+          class="select"
+          name="search"
+          placeholder="Search here ..."
+        />
       </label>
       <!-- dropdown to select episode -->
       <select id="episodes-menu" class="select">
@@ -23,7 +28,12 @@
       <span id="count-info"></span>
     </div>
 
-    <div id="root"></div>
+    <div id="root">
+      <div class="loading">
+        <div class="spinner"></div>
+        <p>Loading episodes… please wait.</p>
+      </div>
+    </div>
 
     <!-- Loads a provided function called getAllEpisodes() which returns all episodes -->
     <footer>
@@ -35,5 +45,3 @@
     <script src="script.js"></script>
   </body>
 </html>
-
-

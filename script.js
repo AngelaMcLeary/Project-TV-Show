@@ -2,9 +2,6 @@
 //update to call data to use API
 async function setup() {
   const rootElem = document.getElementById("root");
-
-  rootElem.innerHTML = "<p>Loading episodes… please wait.</p>";
-
   try {
     const response = await fetch("https://api.tvmaze.com/shows/82/episodes");
 
