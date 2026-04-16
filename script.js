@@ -1,3 +1,6 @@
+// Global cache to store episodes and avoid multiple fetches for the same show
+const episodesCache = {}; 
+
 function fillShowsSelector(allShows) {
   const showMenu = document.getElementById('show-menu');
 
@@ -12,20 +15,29 @@ function fillShowsSelector(allShows) {
   });
 }
 
-// Encapsulates the logic to get episodes for any specific show ID.
-async function fetchDisplayEpisodes(showId){
+/**
+ * Encapsulates the logic to get episodes with Cache implementation
+ */
+async function fetchDisplayEpisodes(showId) {
   const rootElem = document.getElementById('root');
+
+  if(episodeCache[showId]){
+    console.log(`Loading show ${showId} from cache...`);
+    renderShowData(episodesCache[showId]);
+    return;
+  }
+
   rootElem.innerHTML = '<p>Loading episodes… please wait.</p>';
 
   try {
-    const episodesResponse = await fetch(`https://api.tvmaze.com/shows/${showId}/episodes`);
+    console.log(`Fetching show ${showId} from API...`);
+    const episodesResponse = await fetch(
+      `https://api.tvmaze.com/shows/${showId}/episodes`
+    );
     const allEpisodes = await episodesResponse.json();
 
-    makePageForEpisodes(allEpisodes);
-    searchTopic(allEpisodes);
-    updateCount(allEpisodes.length, allEpisodes.length);
-    fillSelector(allEpisodes);
-    setupSelector(allEpisodes);
+    // Store in cache for future use
+    episodesCache[showId] = allEpisodes;
 
   } catch (error) {
     rootElem.innerHTML = `<p style="color:red;">Failed to load episodes. Please try again later.</p>`;
@@ -33,7 +45,16 @@ async function fetchDisplayEpisodes(showId){
   }
 }
 
-
+/**
+ * Helper function to trigger all UI updates
+ */
+function renderShowData(episodes) {
+  makePageForEpisodes(episodes);
+  searchTopic(episodes);
+  updateCount(episodes.length, episodes.length);
+  fillSelector(episodes);
+  setupSelector(episodes);
+}
 
 //update to call data to use API
 async function setup() {
@@ -47,8 +68,8 @@ async function setup() {
 
     // sorting alphabetically all shows with case with acent insensitivity
     allShows.sort((a, b) =>
-      a.name.toLowerCase().toLocaleCompare(b.name.toLowerCase()));
-  
+      a.name.toLowerCase().toLocaleCompare(b.name.toLowerCase())
+    );
 
     //pass the shows to fill the selector with options
     fillShowsSelector(allShows);
@@ -58,11 +79,10 @@ async function setup() {
 
     showMenu.addEventListener('change', (event) => {
       const selectedShowId = event.target.value;
-      if (selectedShowId !== ""){
+      if (selectedShowId !== '') {
         fetchDisplayEpisodes(selectedShowId);
       }
-    })
-
+    });
   } catch (error) {
     //Inform the user visually on the page
     rootElem.innerHTML = `<p style="color:red;">Failed to load episodes. Please try again later.</p>`;
@@ -113,7 +133,7 @@ function makePageForEpisodes(episodeList) {
 function searchTopic(allEpisodes) {
   const searchInput = document.getElementById('search');
   searchInput.value = '';
- 
+
   searchInput.addEventListener('input', (event) => {
     // reset selector every time user types
     document.getElementById('episodes-menu').value = 'all';
