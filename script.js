@@ -1,16 +1,15 @@
-function fillShowsSelector() {
-  const showMEnu = document.getElementById('show-menu');
+function fillShowsSelector(allShows) {
+  const showMenu = document.getElementById('show-menu');
 
   // clear existing options except the first one
-  showMEnu.innerHTML = '<option value="" >select a Show...</option>?';
+  showMenu.innerHTML = '<option value="" >select a Show...</option>?';
 
-  allShow.forEach((show)=> {
+  allShows.forEach((show) => {
     const option = document.createElement('option');
     option.value = show.id;
     option.textContent = show.name;
-    showMEnu.appendChild(option);
+    showMenu.appendChild(option);
   });
-
 }
 
 //update to call data to use API
@@ -20,14 +19,25 @@ async function setup() {
   rootElem.innerHTML = '<p>Loading episodes… please wait.</p>';
 
   try {
-    const response = await fetch("https://api.tvmaze.com/shows");
-    const response = await fetch('https://api.tvmaze.com/shows/82/episodes');
+    // 1. Fetch all shows
+    const showsResponse = await fetch('https://api.tvmaze.com/shows');
+    const allShows = await showsResponse.json();
 
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
+    // sorting alphabetically all shows
+    allShows.sort((a, b) =>
+      a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1
+    );
+
+    // Fill the selector
+    fillShowsSelector(allShows);
+
+    // Fetch episodes for the default show (ID 82)
+    const episodesResponse = await fetch(
+      'https://api.tvmaze.com/shows/82/episodes'
+    );
     //update convert response to JSON
-    const allEpisodes = await response.json();
+    const allEpisodes = await episodesResponse.json();
+
     // run logic logic as is
     makePageForEpisodes(allEpisodes);
     searchTopic(allEpisodes);
@@ -35,8 +45,10 @@ async function setup() {
     fillSelector(allEpisodes);
     setupSelector(allEpisodes);
   } catch (error) {
-    //check for errors
+    //Inform the user visually on the page
     rootElem.innerHTML = `<p style="color:red;">Failed to load episodes. Please try again later.</p>`;
+
+    // Log the technical error for you to debug
     console.error('Fetch error:', error);
   }
 }
@@ -65,7 +77,7 @@ function makePageForEpisodes(episodeList) {
     episodeCard.appendChild(seasonTitle);
     //image for season episode
     const image = document.createElement('img');
-    image.src = episodes.image.medium;
+    image.src = episodes.image ? episodes.image.medium : ''; // Added safety check
     image.alt = episodes.name;
     episodeCard.appendChild(image);
     //summary for season episode
@@ -82,10 +94,7 @@ function makePageForEpisodes(episodeList) {
 function searchTopic(allEpisodes) {
   const searchInput = document.getElementById('search');
   searchInput.value = '';
-  searchInput.dispatchEvent(new Event('input'));
-
-  document.getElementById('episodes-menu').value = 'all';
-
+ 
   searchInput.addEventListener('input', (event) => {
     // reset selector every time user types
     document.getElementById('episodes-menu').value = 'all';
@@ -141,7 +150,6 @@ function setupSelector(allEpisodes) {
     //clear search input
     const searchInput = document.getElementById('search');
     searchInput.value = '';
-    searchInput.dispatchEvent(new Event('input'));
 
     if (selectId === 'all') {
       makePageForEpisodes(allEpisodes);
