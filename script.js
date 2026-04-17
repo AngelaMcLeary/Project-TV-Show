@@ -157,6 +157,10 @@ function makePageForShows(allShows) {
 
     const runtime = document.createElement("p");
     runtime.innerHTML = `<strong>Runtime:</strong> ${show.runtime ? show.runtime + " min" : "N/A"}`;
+    //make the cards clickable ⬅
+    showCard.addEventListener('click', () => {
+      fetchDisplayEpisodes(show.id);
+    })
 
     root.appendChild(showCard);
   });
