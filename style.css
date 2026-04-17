@@ -21,6 +21,7 @@ body {
   align-items: start;
 }
 
+
 .message-container {
   display: flex;
   justify-content: center;
@@ -32,6 +33,14 @@ body {
 
 #count-info {
   display: none; /* will be shown when data is loaded */
+}
+
+/* heading */
+h1 {
+  text-align: center;
+  width: 100%;
+  margin: 20px 0;
+
 }
 
 /* search bar */
@@ -59,7 +68,7 @@ body {
 .select:focus {
   outline: none;
   border-color: #dde2e8;
-  box-shadow: 0 0 0 2px rgba(74,144,226,0.15);
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.15);
 }
 
 /* Count text */
@@ -73,21 +82,23 @@ body {
   background: #fff;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
   cursor: pointer;
 }
 
 .episode-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
 
 /* Image thumbnail*/
 .episode-card img {
   width: 100%;
-  aspect-ratio: 16 / 9;   
-  object-fit: cover; 
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
   object-position: center;
   display: block;
   border-bottom: 1px solid #fff;
@@ -130,12 +141,38 @@ footer a {
   text-decoration: none;
 }
 
-footer a:hover{
+footer a:hover {
   text-decoration: underline;
 }
+/* loading spinner */
+.loading {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  font-size: 1.2rem;
+  color: #444;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #ddd;
+  border-top-color: #4a90e2;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 12px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* media queries for tablet */
 @media (max-width: 900px) {
-
   #root {
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
@@ -156,7 +193,6 @@ footer a:hover{
 
 /* media queries mobile */
 @media (max-width: 600px) {
-
   body {
     font-size: 14px;
   }
