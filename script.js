@@ -166,6 +166,7 @@ async function setup() {
 function setupShowSearch(allShows) {
   const searchInput = document.getElementById("search");
   const countDisplay = document.getElementById("count-info");
+  const total = allShows.length;
 
   searchInput.addEventListener("input", (event) => {
     const query = event.target.value.toLowerCase();
@@ -181,8 +182,10 @@ function setupShowSearch(allShows) {
     makePageForShows(filteredShows);
 
     // update count
-    countDisplay.textContent = `Displaying ${filteredShows.length} shows`;
+    countDisplay.textContent = `Displaying ${filteredShows.length} / ${total}shows`;
   });
+  // Initial state
+  countDisplay.textContent = `Search results: ${total} / ${total}`;
 }
 
 /**
