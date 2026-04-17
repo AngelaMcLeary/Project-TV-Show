@@ -222,6 +222,7 @@ function makePageForShows(allShows) {
     summary.className = "summary";
     summary.innerHTML = show.summary || "No summary available";
     showCard.appendChild(summary);
+    addReadMoreToggle(summary);
 
     const genres = document.createElement("p");
     genres.innerHTML = `<strong>Genres:</strong> ${show.genres.join(", ") || "N/A"}`;
@@ -282,7 +283,9 @@ function makePageForEpisodes(episodeList) {
     summary.className = "summary";
     summary.innerHTML = episode.summary || "No summary available";
     episodeCard.appendChild(summary);
-
+    //read more
+    addReadMoreToggle(summary);
+    
     // add card to page containing season, episode, summary and image
     rootElem.appendChild(episodeCard);
   });
@@ -397,6 +400,27 @@ function setupSelector(allEpisodes) {
       makePageForEpisodes(selectEpisode);
       updateCount(selectEpisode.length, allEpisodes.length);
     }
+  });
+}
+
+function addReadMoreToggle(summaryElement) {
+  // Force layout calculation
+  requestAnimationFrame(() => {
+    const fullHeight = summaryElement.scrollHeight;
+
+    // If summary is short, no toggle needed
+    if (fullHeight <= 80) return;
+
+    const toggle = document.createElement("span");
+    toggle.className = "read-more";
+    toggle.textContent = "Read more";
+
+    toggle.addEventListener("click", () => {
+      const expanded = summaryElement.classList.toggle("expanded");
+      toggle.textContent = expanded ? "Read less" : "Read more";
+    });
+
+    summaryElement.insertAdjacentElement("afterend", toggle);
   });
 }
 
