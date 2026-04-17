@@ -1,10 +1,39 @@
 // Global cache to store episodes and avoid multiple fetches for the same show
 const episodesCache = {};
 
+function renderBreadcrumb(parts) {
+  const breadcrumb = document.getElementById("breadcrumb");
+  breadcrumb.innerHTML = "";
+
+  parts.forEach((part, index) =>{
+    const span = document.createElement("span");
+
+    if (part.clickable) {
+      span.textContent = part.label;
+      span.classList.add("breadcrumb-link");
+      span.addEventListener("click, part.onClick");
+    } else {
+      span.textContent = part.label;
+    }
+      breadcrumb.appendChild(span);
+
+      // add ⬅ seperator after last item
+    if (index < parts.length -1) {
+      const separator = document.createElement("span");
+      //find an arrow code from ascii??
+      separator.textContent = " > ";
+      breadcrumb.appendChild(separator);
+    };
+  });
+};
+
 /**
  * Fills the show selector dropdown with all available shows
  */
 function fillShowsSelector(allShows) {
+  renderBreadcrumb([
+    {label:"Shows", clickable: false}
+  ]);
   const showMenu = document.getElementById("show-menu");
   // clear existing options except the first one
   showMenu.innerHTML = '<option value="" >select a Show...</option>';
