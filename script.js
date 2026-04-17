@@ -126,7 +126,7 @@ function makePageForShows(allShows) {
     showCard.className = 'show-card';
 
     const image = document.createElement('img');
-    image.src = show ? show.image.medium : 'tps://via.placeholder.com/210x295?text=No+Image';
+    image.src = show ? show.image.medium : 'https://via.placeholder.com/210x295?text=No+Image';
     image.alt = show.name;
     showCard.appendChild(image);
 
