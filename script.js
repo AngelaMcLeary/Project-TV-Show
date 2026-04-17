@@ -184,7 +184,7 @@ function makePageForEpisodes(episodeList) {
     seasonTitle.textContent = `${episode.name} - ${makeSeasonAndEpisodes(
       episode,
     )}`;
-    ht;
+    
     episodeCard.appendChild(seasonTitle);
 
     // image for season episode
