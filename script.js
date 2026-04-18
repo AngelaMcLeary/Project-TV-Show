@@ -62,7 +62,11 @@ renderBreadcrumb([
   {
     label: "Shows",
     clickable: true,
-    onClick: () => makePageForShows(allShows)
+    onClick: () => {
+      makePageForShows(allShows);
+      // reset the search bar so that it uses the show search function instead of
+      // the episode search
+    }
   },
   {
     label: show.name,
