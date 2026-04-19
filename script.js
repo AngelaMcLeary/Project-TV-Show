@@ -58,26 +58,26 @@ async function fetchDisplayEpisodes(showId) {
   const show = await showResponse.json();
 
   //render breadcrumbs for show,name
-renderBreadcrumb([
-  {
-    label: "Shows",
-    clickable: true,
-    onClick: () => {
-      makePageForShows(allShows);
-      // reset the search bar so that it uses the show search function instead of
-      // the episode search
-    }
-  },
-  {
-    label: show.name,
-    clickable: true,
-    onClick: () => fetchDisplayEpisodes(showId)
-  },
-  {
-    label: "Episodes",
-    clickable: false,
-  }
-]);
+  renderBreadcrumb([
+    {
+      label: "Shows",
+      clickable: true,
+      onClick: () => {
+        makePageForShows(allShows);
+        // reset the search bar so that it uses the show search function instead of
+        // the episode search
+      },
+    },
+    {
+      label: show.name,
+      clickable: true,
+      onClick: () => fetchDisplayEpisodes(showId),
+    },
+    {
+      label: "Episodes",
+      clickable: false,
+    },
+  ]);
 
   // Check if the show is already in cache to save network requests
   if (episodesCache[showId]) {
@@ -175,7 +175,7 @@ function setupShowSearch(allShows) {
   searchInput.addEventListener("input", (event) => {
     const query = event.target.value.toLowerCase();
 
-    const filteredShows = allShows.filter(show => {
+    const filteredShows = allShows.filter((show) => {
       const nameMatch = show.name.toLowerCase().includes(query);
       const genreMatch = show.genres.join(" ").toLowerCase().includes(query);
       const summaryMatch = (show.summary || "").toLowerCase().includes(query);
@@ -212,9 +212,10 @@ function makePageForShows(allShows) {
     showCard.className = "show-card";
 
     const image = document.createElement("img");
-    image.src = show
-      ? show.image.medium
-      : "https://via.placeholder.com/210x295?text=No+Image";
+    image.src =
+      show.image && show.image.medium
+        ? show.image.medium
+        : "https://via.placeholder.com/210x295?text=No+Image";
     image.alt = show.name;
     showCard.appendChild(image);
 
@@ -276,9 +277,10 @@ function makePageForEpisodes(episodeList) {
 
     // image for season episode
     const image = document.createElement("img");
-    image.src = episode.image
-      ? episode.image.medium
-      : "https://static.tvmaze.com/images/no-img/no-img-portrait-text.png";
+    image.src =
+      episode.image && episode.image.medium
+        ? episode.image.medium
+        : "https://static.tvmaze.com/images/no-img/no-img-portrait-text.png";
     image.alt = episode.name;
     episodeCard.appendChild(image);
 
@@ -289,7 +291,7 @@ function makePageForEpisodes(episodeList) {
     episodeCard.appendChild(summary);
     //read more
     addReadMoreToggle(summary);
-    
+
     // add card to page containing season, episode, summary and image
     rootElem.appendChild(episodeCard);
   });
