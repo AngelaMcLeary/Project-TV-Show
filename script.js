@@ -1,63 +1,47 @@
-// Global cache to store episodes and avoid multiple fetches for the same show
+//global state
+const showDetailsCache = {};
 const episodesCache = {};
 let allShows = [];
-const showDetailsCache = {};
 
-function renderBreadcrumb(parts) {
-  const breadcrumb = document.getElementById("breadcrumb");
-  breadcrumb.innerHTML = "";
+//load the app
+window.onload = setup;
 
-  parts.forEach((part, index) => {
-    const span = document.createElement("span");
-
-    if (part.clickable) {
-      span.textContent = part.label;
-      span.classList.add("breadcrumb-link");
-    }
-    if (part.onClick) {
-      span.addEventListener("click", part.onClick);
-    } else {
-      span.textContent = part.label;
-    }
-
-    breadcrumb.appendChild(span);
-
-    // add ⬅ separator after last item
-    if (index < parts.length - 1) {
-      const separator = document.createElement("span");
-      //find an arrow code from ascii??
-      separator.textContent = " > ";
-      breadcrumb.appendChild(separator);
-    }
-  });
-}
-
-/**
- * Fills the show selector dropdown with all available shows
- */
-function fillShowsSelector(allShows) {
+//initial setup
+// loads all shows, sorts them and set's up UI
+async function setup() {
+  const rootElem = document.getElementById("root");
   const showMenu = document.getElementById("show-menu");
-  // clear existing options except the first one
-  showMenu.innerHTML = '<option value="" >select a Show...</option>';
 
-  allShows.forEach((show) => {
-    const option = document.createElement("option");
-    option.value = show.id;
-    option.textContent = show.name;
-    showMenu.appendChild(option);
-  });
+  try {
+    const showsResponse = await fetch("https://api.tvmaze.com/shows");
+    allShows = await showsResponse.json();
+
+    allShows.sort((a, b) =>
+      a.name.toLowerCase().localeCompare(b.name.toLowerCase()),
+    );
+
+    makePageForShows(allShows);
+    fillShowsSelector(allShows);
+    setupShowSearch(allShows);
+
+    showMenu.addEventListener("change", (event) => {
+      const selectedShowId = event.target.value;
+      if (selectedShowId !== "") {
+        fetchDisplayEpisodes(selectedShowId);
+      }
+    });
+  } catch (error) {
+    rootElem.innerHTML = `<p style="color:red;">Failed to load data. Please try again later.</p>`;
+    console.error("Fetch error:", error);
+  }
 }
 
-/**
- * Encapsulates the logic to get episodes with Cache implementation
- */
+//fetching functions
+//load show details and episodes with caching
 async function fetchDisplayEpisodes(showId) {
   const rootElem = document.getElementById("root");
 
-  // get show details first
-  // get show details with caching
   let show;
-
   if (showDetailsCache[showId]) {
     show = showDetailsCache[showId];
   } else {
@@ -65,15 +49,12 @@ async function fetchDisplayEpisodes(showId) {
     show = await showResponse.json();
     showDetailsCache[showId] = show;
   }
-  //render breadcrumbs for show,name
   renderBreadcrumb([
     {
       label: "Shows",
       clickable: true,
       onClick: () => {
         makePageForShows(allShows);
-        // reset the search bar so that it uses the show search function instead of
-        // the episode search
       },
     },
     {
@@ -87,9 +68,7 @@ async function fetchDisplayEpisodes(showId) {
     },
   ]);
 
-  // Check if the show is already in cache to save network requests
   if (episodesCache[showId]) {
-    //console.log(`Loading show ${showId} from cache...`);
     renderShowData(episodesCache[showId]);
     return;
   }
@@ -97,13 +76,11 @@ async function fetchDisplayEpisodes(showId) {
   rootElem.innerHTML = "<p>Loading episodes… please wait.</p>";
 
   try {
-    //console.log(`Fetching show ${showId} from API...`);
     const episodesResponse = await fetch(
       `https://api.tvmaze.com/shows/${showId}/episodes`,
     );
     const allEpisodes = await episodesResponse.json();
 
-    // Store in cache for future use
     episodesCache[showId] = allEpisodes;
 
     renderShowData(allEpisodes);
@@ -113,151 +90,44 @@ async function fetchDisplayEpisodes(showId) {
   }
 }
 
-/**
- * Helper function to trigger all UI updates (page, search, count, and selectors)
- */
-function renderShowData(episodes) {
-  showEpisodeSearchUI();
-  makePageForEpisodes(episodes);
-  setupEpisodeSearch(episodes);
-  updateCount(episodes.length, episodes.length);
-  fillSelector(episodes);
-  setupSelector(episodes);
-}
+//rendering functions
+// ?? render breadcrumbs
+function renderBreadcrumb(parts) {
+  const breadcrumb = document.getElementById("breadcrumb");
+  breadcrumb.innerHTML = "";
 
-/**
- * Initial setup: fetches all shows, sorts them, and loads the default show
- */
-async function setup() {
-  const rootElem = document.getElementById("root");
-  const showMenu = document.getElementById("show-menu");
+  parts.forEach((part, index) => {
+    const span = document.createElement("span");
 
-  //clean state to avoid confusion while loading shows - remove the holding message⬅
-  // rootElem.innerHTML =
-  //   '<div class="message-container"><h2>Select a show to begin...</h2></div>';
+    span.textContent = part.label;
+    if (part.clickable) span.classList.add("breadcrumb-link");
+    if (part.onClick) span.addEventListener("click", part.onClick);
+    
+    breadcrumb.appendChild(span);
 
-  try {
-    // 1. Fetch all shows from TVMaze API
-    const showsResponse = await fetch("https://api.tvmaze.com/shows");
-    allShows = await showsResponse.json();
-
-    // sorting alphabetically all shows with case and accent insensitivity
-    allShows.sort((a, b) =>
-      a.name.toLowerCase().localeCompare(b.name.toLowerCase()),
-    );
-    //render the show listings⬅
-    makePageForShows(allShows);
-    // pass the shows to fill the selector with options
-    fillShowsSelector(allShows);
-
-    setupShowSearch(allShows);
-
-    // Listener to change episodes when a new show is selected
-    showMenu.addEventListener("change", (event) => {
-      const selectedShowId = event.target.value;
-      if (selectedShowId !== "") {
-        fetchDisplayEpisodes(selectedShowId);
-      }
-      ///this can do the button back for to show other shows instead a button to reset the page, but I think it is more intuitive to just select another show from the dropdown
-      // else {
-      //   // Return to empty state if "Select a Show" is picked again
-      //   rootElem.innerHTML =
-      //     '<div class="message-container"><h2>Select a show to begin...</h2></div>';
-      //   const countDisplay = document.getElementById('count-info');
-      //   if (countDisplay) countDisplay.style.display = 'none';
-      // }
-    });
-  } catch (error) {
-    // If they select the placeholder again, show the welcome message
-    rootElem.innerHTML = `<p style="color:red;">Failed to load data. Please try again later.</p>`;
-    console.error("Fetch error:", error);
-  }
-}
-//setup for episode search
-function setupEpisodeSearch(allEpisodes) {
-  // Wait for DOM to finish updating
-  requestAnimationFrame(() => {
-    const searchInput = document.getElementById("episode-search");
-    if (!searchInput) return;
-
-    // Remove old listeners by cloning
-    const newSearchInput = searchInput.cloneNode(true);
-    searchInput.parentNode.replaceChild(newSearchInput, searchInput);
-
-    newSearchInput.value = "";
-
-    newSearchInput.addEventListener("input", (event) => {
-      const episodeMenu = document.getElementById("episodes-menu");
-      if (episodeMenu) episodeMenu.value = "all";
-
-      const searchTerm = event.target.value.toLowerCase();
-
-      const filtered = allEpisodes.filter((episode) => {
-        const nameMatch = episode.name.toLowerCase().includes(searchTerm);
-        const summaryMatch = (episode.summary || "")
-          .toLowerCase()
-          .includes(searchTerm);
-        return nameMatch || summaryMatch;
-      });
-
-      updateCount(filtered.length, allEpisodes.length);
-      makePageForEpisodes(filtered);
-    });
+    if (index < parts.length - 1) {
+      const separator = document.createElement("span");
+      //find an arrow code from ascii??
+      separator.textContent = " > ";
+      breadcrumb.appendChild(separator);
+    }
   });
 }
 
-//setups for shows
-
-function setupShowSearch(allShows) {
-  const searchInput = document.getElementById("show-search");
-  const countDisplay = document.getElementById("count-info");
-  const total = allShows.length;
-
-  searchInput.addEventListener("input", (event) => {
-    const query = event.target.value.toLowerCase();
-
-    const filteredShows = allShows.filter((show) => {
-      const nameMatch = show.name.toLowerCase().includes(query);
-      const genreMatch = show.genres.join(" ").toLowerCase().includes(query);
-      const summaryMatch = (show.summary || "").toLowerCase().includes(query);
-
-      return nameMatch || genreMatch || summaryMatch;
-    });
-
-    makePageForShows(filteredShows);
-
-    // update count
-    countDisplay.textContent = `Displaying ${filteredShows.length} / ${total} shows`;
-  });
-  // Initial state
-  countDisplay.textContent = `Search results: ${total} / ${total}`;
-}
-
-/**
- * Formats the season and episode number into a standard S01E01 format
- */
-function makeSeasonAndEpisodes(episode) {
-  const paddedSeason = episode.season.toString().padStart(2, "0");
-  const paddedEpisode = episode.number.toString().padStart(2, "0");
-  return `S${paddedSeason}E${paddedEpisode}`;
-}
-
-// make the page for the shows
+//renders the list of shows
 function makePageForShows(allShows) {
   showShowSearchUI();
-  //hide episode count when returning to shows
   const countDisplay = document.getElementById("count-info");
   if (countDisplay) {
     countDisplay.style.display = "none";
     countDisplay.textContent = "";
   }
-  //reset search input
+
   const showSearch = document.getElementById("show-search");
   if (showSearch) showSearch.value = "";
 
-// Reset show selector to default
-const showMenu = document.getElementById("show-menu");
-if (showMenu) showMenu.value = "";
+  const showMenu = document.getElementById("show-menu");
+  if (showMenu) showMenu.value = "";
 
   renderBreadcrumb([{ label: "Shows", clickable: false }]);
   const root = document.getElementById("root");
@@ -301,7 +171,8 @@ if (showMenu) showMenu.value = "";
 
     const runtime = document.createElement("p");
     runtime.innerHTML = `<strong>Runtime:</strong> ${show.runtime ? show.runtime + " min" : "N/A"}`;
-    //make the cards clickable ⬅
+    showCard.appendChild(runtime);
+
     showCard.addEventListener("click", () => {
       fetchDisplayEpisodes(show.id);
     });
@@ -310,28 +181,21 @@ if (showMenu) showMenu.value = "";
   });
 }
 
-/**
- * Creates and appends episode cards to the DOM
- */
+//renders list of episodes
 function makePageForEpisodes(episodeList) {
   const rootElem = document.getElementById("root");
-  // clear previous content before rendering new episodes
   rootElem.innerHTML = "";
 
   episodeList.forEach((episode) => {
-    // container for episodes
     const episodeCard = document.createElement("div");
     episodeCard.className = "episode-card";
 
-    // season title
     const seasonTitle = document.createElement("h2");
     seasonTitle.textContent = `${episode.name} - ${makeSeasonAndEpisodes(
       episode,
     )}`;
-
     episodeCard.appendChild(seasonTitle);
 
-    // image for season episode
     const image = document.createElement("img");
     image.src =
       episode.image && episode.image.medium
@@ -340,43 +204,95 @@ function makePageForEpisodes(episodeList) {
     image.alt = episode.name;
     episodeCard.appendChild(image);
 
-    // summary for season episode
     const summary = document.createElement("p");
     summary.className = "summary";
     summary.innerHTML = episode.summary || "No summary available";
     episodeCard.appendChild(summary);
-    //read more
+
     addReadMoreToggle(summary);
 
-    // add card to page containing season, episode, summary and image
     rootElem.appendChild(episodeCard);
   });
 }
 
-// ---------- Search bar ---------
-
-// ------- displaySearchCount ------
-
-/**
- * Updates the text showing how many episodes are currently displayed
- * and handles the visibility of the counter
- */
+// update the episode count
 function updateCount(found, total) {
   const countDisplay = document.getElementById("count-info");
   if (countDisplay) {
-    // When this function runs, we make the element visible
     countDisplay.style.display = "inline";
     countDisplay.textContent = `Displaying ${found}/${total} episodes`;
   }
 }
 
-/**
- * Populates the episode selector dropdown.
- * If no episodes are provided, it shows a placeholder.
- */
+//triggers all UI updates for episodes
+function renderShowData(episodes) {
+  showEpisodeSearchUI();
+  makePageForEpisodes(episodes);
+  setupEpisodeSearch(episodes);
+  updateCount(episodes.length, episodes.length);
+  fillSelector(episodes);
+  setupSelector(episodes);
+}
+
+//****search and selectors
+//episode search
+function setupEpisodeSearch(allEpisodes) {
+  requestAnimationFrame(() => {
+    const searchInput = document.getElementById("episode-search");
+    if (!searchInput) return;
+
+    const newSearchInput = searchInput.cloneNode(true);
+    searchInput.parentNode.replaceChild(newSearchInput, searchInput);
+
+    newSearchInput.value = "";
+
+    newSearchInput.addEventListener("input", (event) => {
+      const episodeMenu = document.getElementById("episodes-menu");
+      if (episodeMenu) episodeMenu.value = "all";
+
+      const searchTerm = event.target.value.toLowerCase();
+
+      const filtered = allEpisodes.filter((episode) => {
+        const nameMatch = episode.name.toLowerCase().includes(searchTerm);
+        const summaryMatch = (episode.summary || "")
+          .toLowerCase()
+          .includes(searchTerm);
+        return nameMatch || summaryMatch;
+      });
+
+      updateCount(filtered.length, allEpisodes.length);
+      makePageForEpisodes(filtered);
+    });
+  });
+}
+
+//show search
+function setupShowSearch(allShows) {
+  const searchInput = document.getElementById("show-search");
+  const countDisplay = document.getElementById("count-info");
+  const total = allShows.length;
+
+  searchInput.addEventListener("input", (event) => {
+    const query = event.target.value.toLowerCase();
+
+    const filteredShows = allShows.filter((show) => {
+      const nameMatch = show.name.toLowerCase().includes(query);
+      const genreMatch = show.genres.join(" ").toLowerCase().includes(query);
+      const summaryMatch = (show.summary || "").toLowerCase().includes(query);
+
+      return nameMatch || genreMatch || summaryMatch;
+    });
+
+    makePageForShows(filteredShows);
+
+    countDisplay.textContent = `Displaying ${filteredShows.length} / ${total} shows`;
+  });
+  countDisplay.textContent = `Search results: ${total} / ${total}`;
+}
+
+//episode selector
 function fillSelector(allEpisodes) {
   const selector = document.getElementById("episodes-menu");
-  // clear selector before adding new options
   selector.innerHTML = "";
 
   if (!allEpisodes || allEpisodes.length === 0) {
@@ -386,13 +302,11 @@ function fillSelector(allEpisodes) {
     return;
   }
 
-  // add "Show all episodes" default option
   const defaultOption = document.createElement("option");
   defaultOption.value = "all";
   defaultOption.textContent = "Show all episodes";
   selector.appendChild(defaultOption);
 
-  // add specific episode options
   allEpisodes.forEach((episode) => {
     const option = document.createElement("option");
     option.value = episode.id;
@@ -400,21 +314,28 @@ function fillSelector(allEpisodes) {
     selector.appendChild(option);
   });
 }
+//episode selector
+function fillShowsSelector(allShows) {
+  const showMenu = document.getElementById("show-menu");
+  showMenu.innerHTML = '<option value="" >select a Show...</option>';
 
-/**
- * Sets up the change listener for the episode selector dropdown
- */
+  allShows.forEach((show) => {
+    const option = document.createElement("option");
+    option.value = show.id;
+    option.textContent = show.name;
+    showMenu.appendChild(option);
+  });
+}
+
+// episode selector logic
 function setupSelector(allEpisodes) {
   const selector = document.getElementById("episodes-menu");
-
-  // Point 4: Clear old listeners by cloning
   const newSelector = selector.cloneNode(true);
   selector.parentNode.replaceChild(newSelector, selector);
 
   newSelector.addEventListener("change", (event) => {
     const selectId = event.target.value;
 
-    // clear search input when an episode is selected from dropdown
     const currentSearchInput = document.getElementById("episode-search");
     if (currentSearchInput) currentSearchInput.value = "";
 
@@ -422,7 +343,6 @@ function setupSelector(allEpisodes) {
       makePageForEpisodes(allEpisodes);
       updateCount(allEpisodes.length, allEpisodes.length);
     } else {
-      // find the episode with the matching id and display it
       const selectEpisode = allEpisodes.filter(
         (episode) => episode.id == selectId,
       );
@@ -432,12 +352,37 @@ function setupSelector(allEpisodes) {
   });
 }
 
+// *** toggles
+//search UI box for shows
+function showShowSearchUI() {
+  document.getElementById("show-search-container").style.display = "block";
+  document.getElementById("show-selector-container").style.display = "block";
+
+  document.getElementById("episode-search-container").style.display = "none";
+  document.getElementById("episode-selector-container").style.display = "none";
+}
+//search UI box for episodes
+function showEpisodeSearchUI() {
+  document.getElementById("show-search-container").style.display = "none";
+  document.getElementById("show-selector-container").style.display = "none";
+
+  document.getElementById("episode-search-container").style.display = "block";
+  document.getElementById("episode-selector-container").style.display = "block";
+}
+
+//***Utility Functions
+//format S01 and E01
+function makeSeasonAndEpisodes(episode) {
+  const paddedSeason = episode.season.toString().padStart(2, "0");
+  const paddedEpisode = episode.number.toString().padStart(2, "0");
+  return `S${paddedSeason}E${paddedEpisode}`;
+}
+
+// adds read-more toggle
 function addReadMoreToggle(summaryElement) {
-  // Force layout calculation
   requestAnimationFrame(() => {
     const fullHeight = summaryElement.scrollHeight;
 
-    // If summary is short, no toggle needed
     if (fullHeight <= 80) return;
 
     const toggle = document.createElement("span");
@@ -453,21 +398,3 @@ function addReadMoreToggle(summaryElement) {
     summaryElement.insertAdjacentElement("afterend", toggle);
   });
 }
-//search box for shows
-function showShowSearchUI() {
-  document.getElementById("show-search-container").style.display = "block";
-  document.getElementById("show-selector-container").style.display = "block";
-
-  document.getElementById("episode-search-container").style.display = "none";
-  document.getElementById("episode-selector-container").style.display = "none";
-}
-//search box for episodes
-function showEpisodeSearchUI() {
-  document.getElementById("show-search-container").style.display = "none";
-  document.getElementById("show-selector-container").style.display = "none";
-
-  document.getElementById("episode-search-container").style.display = "block";
-  document.getElementById("episode-selector-container").style.display = "block";
-}
-// Initialize the application on window load
-window.onload = setup;
