@@ -245,6 +245,20 @@ function makeSeasonAndEpisodes(episode) {
 // make the page for the shows
 function makePageForShows(allShows) {
   showShowSearchUI();
+  //hide episode count when returning to shows
+  const countDisplay = document.getElementById("count-info");
+  if (countDisplay) {
+    countDisplay.style.display = "none";
+    countDisplay.textContent = "";
+  }
+  //reset search input
+  const showSearch = document.getElementById("show-search");
+  if (showSearch) showSearch.value = "";
+
+// Reset show selector to default
+const showMenu = document.getElementById("show-menu");
+if (showMenu) showMenu.value = "";
+
   renderBreadcrumb([{ label: "Shows", clickable: false }]);
   const root = document.getElementById("root");
   root.innerHTML = "";
