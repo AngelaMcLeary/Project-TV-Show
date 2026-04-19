@@ -186,7 +186,7 @@ function setupShowSearch(allShows) {
     makePageForShows(filteredShows);
 
     // update count
-    countDisplay.textContent = `Displaying ${filteredShows.length} / ${total}shows`;
+    countDisplay.textContent = `Displaying ${filteredShows.length} / ${total} shows`;
   });
   // Initial state
   countDisplay.textContent = `Search results: ${total} / ${total}`;
