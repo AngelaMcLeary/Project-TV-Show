@@ -1,6 +1,7 @@
 // Global cache to store episodes and avoid multiple fetches for the same show
 const episodesCache = {};
 let allShows = [];
+const showDetailsCache = {};
 
 function renderBreadcrumb(parts) {
   const breadcrumb = document.getElementById("breadcrumb");
