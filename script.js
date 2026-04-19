@@ -56,15 +56,15 @@ async function fetchDisplayEpisodes(showId) {
 
   // get show details first
   // get show details with caching
-let show;
+  let show;
 
-if (showDetailsCache[showId]) {
-  show = showDetailsCache[showId];
-} else {
-  const showResponse = await fetch(`https://api.tvmaze.com/shows/${showId}`);
-  show = await showResponse.json();
-  showDetailsCache[showId] = show;
-}
+  if (showDetailsCache[showId]) {
+    show = showDetailsCache[showId];
+  } else {
+    const showResponse = await fetch(`https://api.tvmaze.com/shows/${showId}`);
+    show = await showResponse.json();
+    showDetailsCache[showId] = show;
+  }
   //render breadcrumbs for show,name
   renderBreadcrumb([
     {
@@ -117,6 +117,7 @@ if (showDetailsCache[showId]) {
  * Helper function to trigger all UI updates (page, search, count, and selectors)
  */
 function renderShowData(episodes) {
+  showEpisodeSearchUI();
   makePageForEpisodes(episodes);
   searchTopic(episodes);
   updateCount(episodes.length, episodes.length);
@@ -176,7 +177,7 @@ async function setup() {
 //setups for shows
 
 function setupShowSearch(allShows) {
-  const searchInput = document.getElementById("search");
+  const searchInput = document.getElementById("show-search");
   const countDisplay = document.getElementById("count-info");
   const total = allShows.length;
 
@@ -211,6 +212,7 @@ function makeSeasonAndEpisodes(episode) {
 
 // make the page for the shows
 function makePageForShows(allShows) {
+  showShowSearchUI();
   renderBreadcrumb([{ label: "Shows", clickable: false }]);
   const root = document.getElementById("root");
   root.innerHTML = "";
@@ -311,7 +313,8 @@ function makePageForEpisodes(episodeList) {
  * Sets up the search functionality and handles live filtering
  */
 function searchTopic(allEpisodes) {
-  const searchInput = document.getElementById("search");
+  const searchInput = document.getElementById("episode-search");
+  if (!searchInput) return;
 
   // Point 4: Clear old listeners by cloning the element
   const newSearchInput = searchInput.cloneNode(true);
@@ -437,6 +440,21 @@ function addReadMoreToggle(summaryElement) {
     summaryElement.insertAdjacentElement("afterend", toggle);
   });
 }
+//search box for shows
+function showShowSearchUI() {
+  document.getElementById("show-search-container").style.display = "block";
+  document.getElementById("show-selector-container").style.display = "block";
 
+  document.getElementById("episode-search-container").style.display = "none";
+  document.getElementById("episode-selector-container").style.display = "none";
+}
+//search box for episodes
+function showEpisodeSearchUI() {
+  document.getElementById("show-search-container").style.display = "none";
+  document.getElementById("show-selector-container").style.display = "none";
+
+  document.getElementById("episode-search-container").style.display = "block";
+  document.getElementById("episode-selector-container").style.display = "block";
+}
 // Initialize the application on window load
 window.onload = setup;

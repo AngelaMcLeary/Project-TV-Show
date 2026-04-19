@@ -1,50 +1,59 @@
 <!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TV Show Project | Angela McLeary (AngelaMcLeary)</title>
+    <link href="style.css" rel="stylesheet" />
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TV Show Project | Angela McLeary (AngelaMcLeary)</title>
-  <link href="style.css" rel="stylesheet" />
-  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-</head>
+  <body>
+    <div class="breadcrumb" id="breadcrumb"></div>
+    <header>
+      <h1>TV Show Project</h1>
 
-<body>
-  <div class="breadcrumb" id="breadcrumb"></div>
-  <header>
-    <h1>TV Show Project</h1>
+      <nav class="searchbar">
+        <!-- searchbar -->
+        <!-- show search -->
+        <div id="show-search-container" class="select">
+          <label for="show-search">Search Shows</label>
+          <input type="text" id="show-search" placeholder="Search shows..." />
+        </div>
+        <!-- episode search -->
+        <!-- update styling -->
+        <div id="episode-search-container" class="select" style="display: none">
+          <label for="episode-search">Search Episodes</label>
+          <input
+            type="text"
+            id="episode-search"
+            placeholder="Search episodes..."
+          />
+        </div>
 
-    <nav class="searchbar">
+        <!-- dropdown to select show -->
+        <div id="show-selector-container" class="select">
+          <label for="show-menu">Show:</label>
+          <select id="show-menu" class="select">
+            <option value="">All Shows</option>
+          </select>
+        </div>
 
-      <!-- searchbar -->
-      <div id="show-search-container" class="select">
-        <label for="search">Search</label>
-        <input type="text" id="search" class="select" name="search" placeholder="Search here ..." />
-      </div>
+        <!-- dropdown to select episode -->
+        <div id="episode-selector-container" class="select">
+          <label for="episodes-menu">Episode:</label>
+          <select id="episodes-menu" class="select">
+            <option value="all">All Episodes</option>
+          </select>
+        </div>
 
-      <!-- dropdown to select show -->
-      <div id="show-selector-container" class="select">
-        <label for="show-menu">Show:</label>
-        <select id="show-menu" class="select">
-          <option value="">All Shows</option>
-        </select>
-      </div>
+        <!-- displaying -->
+        <span id="count-info"></span>
+      </nav>
+    </header>
 
-      <!-- dropdown to select episode -->
-      <div id="episode-selector-container" class="select">
-        <label for="episodes-menu">Episode:</label>
-        <select id="episodes-menu" class="select">
-          <option value="all">All Episodes</option>
-        </select>
-      </div>
-
-      <!-- displaying -->
-      <span id="count-info"></span>
-    </nav>
-   </header>
-
-   <main id="root">
-<!--       <div class="loading">
+    <main id="root">
+      <!--       <div class="loading">
         <div class="spinner"></div>
         <p>Loading episodes… please wait.</p>
       </div> -->
