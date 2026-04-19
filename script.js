@@ -354,19 +354,31 @@ function setupSelector(allEpisodes) {
 // *** toggles
 //search UI box for shows
 function showShowSearchUI() {
-  document.getElementById("show-search-container").style.display = "block";
-  document.getElementById("show-selector-container").style.display = "block";
+  const showSearch = document.getElementById("show-search-container");
+  const showSelector = document.getElementById("show-selector-container");
+  
+  const episodeSearch = document.getElementById("episode-search-container");
+  const episodeSelector = document.getElementById("episode-selector-container"); 
+  
+  showSearch.classList.remove("hidden");
+  showSelector.classList.remove("hidden");
 
-  document.getElementById("episode-search-container").style.display = "none";
-  document.getElementById("episode-selector-container").style.display = "none";
+  episodeSearch.classList.add("hidden");
+  episodeSelector.classList.add("hidden");
 };
 //search UI box for episodes
 function showEpisodeSearchUI() {
-  document.getElementById("show-search-container").style.display = "none";
-  document.getElementById("show-selector-container").style.display = "none";
+  const showSearch = document.getElementById("show-search-container");
+  const showSelector = document.getElementById("show-selector-container");
 
-  document.getElementById("episode-search-container").style.display = "block";
-  document.getElementById("episode-selector-container").style.display = "block";
+  const episodeSearch = document.getElementById("episode-search-container");
+  const episodeSelector = document.getElementById("episode-selector-container");
+
+  showSearch.classList.add("hidden");
+  showSelector.classList.add("hidden");
+
+  episodeSearch.classList.remove("hidden");
+  episodeSelector.classList.remove("hidden");
 };
 
 //***Utility Functions

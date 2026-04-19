@@ -175,6 +175,10 @@ h1 {
 .read-more:hover {
   color: #005fa3;
 }
+/* hidden */
+.hidden {
+  display: none;
+}
 
 /* footer info */
 footer {
