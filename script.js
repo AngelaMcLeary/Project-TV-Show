@@ -119,7 +119,7 @@ async function fetchDisplayEpisodes(showId) {
 function renderShowData(episodes) {
   showEpisodeSearchUI();
   makePageForEpisodes(episodes);
-  searchTopic(episodes);
+  setupEpisodeSearch(episodes);
   updateCount(episodes.length, episodes.length);
   fillSelector(episodes);
   setupSelector(episodes);
@@ -172,6 +172,38 @@ async function setup() {
     rootElem.innerHTML = `<p style="color:red;">Failed to load data. Please try again later.</p>`;
     console.error("Fetch error:", error);
   }
+}
+//setup for episode search
+function setupEpisodeSearch(allEpisodes) {
+  // Wait for DOM to finish updating
+  requestAnimationFrame(() => {
+    const searchInput = document.getElementById("episode-search");
+    if (!searchInput) return;
+
+    // Remove old listeners by cloning
+    const newSearchInput = searchInput.cloneNode(true);
+    searchInput.parentNode.replaceChild(newSearchInput, searchInput);
+
+    newSearchInput.value = "";
+
+    newSearchInput.addEventListener("input", (event) => {
+      const episodeMenu = document.getElementById("episodes-menu");
+      if (episodeMenu) episodeMenu.value = "all";
+
+      const searchTerm = event.target.value.toLowerCase();
+
+      const filtered = allEpisodes.filter((episode) => {
+        const nameMatch = episode.name.toLowerCase().includes(searchTerm);
+        const summaryMatch = (episode.summary || "")
+          .toLowerCase()
+          .includes(searchTerm);
+        return nameMatch || summaryMatch;
+      });
+
+      updateCount(filtered.length, allEpisodes.length);
+      makePageForEpisodes(filtered);
+    });
+  });
 }
 
 //setups for shows
@@ -309,40 +341,6 @@ function makePageForEpisodes(episodeList) {
 
 // ---------- Search bar ---------
 
-/**
- * Sets up the search functionality and handles live filtering
- */
-function searchTopic(allEpisodes) {
-  const searchInput = document.getElementById("episode-search");
-  if (!searchInput) return;
-
-  // Point 4: Clear old listeners by cloning the element
-  const newSearchInput = searchInput.cloneNode(true);
-  searchInput.parentNode.replaceChild(newSearchInput, searchInput);
-
-  newSearchInput.value = "";
-
-  newSearchInput.addEventListener("input", (event) => {
-    // reset episode selector every time user types in search
-    const episodeMenu = document.getElementById("episodes-menu");
-    if (episodeMenu) episodeMenu.value = "all";
-
-    const searchTerm = event.target.value.toLowerCase();
-
-    // filter episodes based on name or summary match
-    const filterEpisodes = allEpisodes.filter((episode) => {
-      const nameMatch = episode.name.toLowerCase().includes(searchTerm);
-      const summaryMatch = (episode.summary || "")
-        .toLowerCase()
-        .includes(searchTerm);
-      return nameMatch || summaryMatch;
-    });
-
-    updateCount(filterEpisodes.length, allEpisodes.length);
-    makePageForEpisodes(filterEpisodes);
-  });
-}
-
 // ------- displaySearchCount ------
 
 /**
@@ -403,7 +401,7 @@ function setupSelector(allEpisodes) {
     const selectId = event.target.value;
 
     // clear search input when an episode is selected from dropdown
-    const currentSearchInput = document.getElementById("search");
+    const currentSearchInput = document.getElementById("episode-search");
     if (currentSearchInput) currentSearchInput.value = "";
 
     if (selectId === "all") {
