@@ -55,8 +55,16 @@ async function fetchDisplayEpisodes(showId) {
   const rootElem = document.getElementById("root");
 
   // get show details first
-  const showResponse = await fetch(`https://api.tvmaze.com/shows/${showId}`);
-  const show = await showResponse.json();
+  let show;
+  
+  if show(showDetailsCache[showId]){
+    show = showDetailsCache[showId];
+  }else{
+    const showResponse = await fetch(`https://api.tvmaze.com/shows/${showId}`);
+  show = await showResponse.json();
+  showDetailsCache[showId] = show;
+  }
+
 
   //render breadcrumbs for show,name
   renderBreadcrumb([
