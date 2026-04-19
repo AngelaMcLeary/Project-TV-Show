@@ -28,13 +28,13 @@ async function setup() {
       const selectedShowId = event.target.value;
       if (selectedShowId !== "") {
         fetchDisplayEpisodes(selectedShowId);
-      }
+      };
     });
   } catch (error) {
     rootElem.innerHTML = `<p style="color:red;">Failed to load data. Please try again later.</p>`;
     console.error("Fetch error:", error);
-  }
-}
+  };
+};
 
 //fetching functions
 //load show details and episodes with caching
@@ -48,7 +48,7 @@ async function fetchDisplayEpisodes(showId) {
     const showResponse = await fetch(`https://api.tvmaze.com/shows/${showId}`);
     show = await showResponse.json();
     showDetailsCache[showId] = show;
-  }
+  };
   renderBreadcrumb([
     {
       label: "Shows",
@@ -71,7 +71,7 @@ async function fetchDisplayEpisodes(showId) {
   if (episodesCache[showId]) {
     renderShowData(episodesCache[showId]);
     return;
-  }
+  };
 
   rootElem.innerHTML = "<p>Loading episodes… please wait.</p>";
 
@@ -87,8 +87,8 @@ async function fetchDisplayEpisodes(showId) {
   } catch (error) {
     rootElem.innerHTML = `<p style="color:red;">Failed to load episodes. Please try again later.</p>`;
     console.error("fetch error:", error);
-  }
-}
+  };
+};
 
 //rendering functions
 // ?? render breadcrumbs
@@ -109,9 +109,9 @@ function renderBreadcrumb(parts) {
       const separator = document.createElement("span");
       separator.textContent = "›";
       breadcrumb.appendChild(separator);
-    }
+    };
   });
-}
+};
 
 //renders the list of shows
 function makePageForShows(allShows) {
@@ -178,7 +178,7 @@ function makePageForShows(allShows) {
 
     root.appendChild(showCard);
   });
-}
+};
 
 //renders list of episodes
 function makePageForEpisodes(episodeList) {
@@ -212,7 +212,7 @@ function makePageForEpisodes(episodeList) {
 
     rootElem.appendChild(episodeCard);
   });
-}
+};
 
 // update the episode count
 function updateCount(found, total) {
@@ -220,8 +220,8 @@ function updateCount(found, total) {
   if (countDisplay) {
     countDisplay.style.display = "inline";
     countDisplay.textContent = `Displaying ${found}/${total} episodes`;
-  }
-}
+  };
+};
 
 //triggers all UI updates for episodes
 function renderShowData(episodes) {
@@ -231,7 +231,7 @@ function renderShowData(episodes) {
   updateCount(episodes.length, episodes.length);
   fillSelector(episodes);
   setupSelector(episodes);
-}
+};
 
 //****search and selectors
 //episode search
@@ -263,7 +263,7 @@ function setupEpisodeSearch(allEpisodes) {
       makePageForEpisodes(filtered);
     });
   });
-}
+};
 
 //show search
 function setupShowSearch(allShows) {
@@ -299,7 +299,7 @@ function fillSelector(allEpisodes) {
     option.textContent = "Wait for a show...";
     selector.appendChild(option);
     return;
-  }
+  };
 
   const defaultOption = document.createElement("option");
   defaultOption.value = "all";
@@ -312,7 +312,7 @@ function fillSelector(allEpisodes) {
     option.textContent = `${makeSeasonAndEpisodes(episode)} - ${episode.name}`;
     selector.appendChild(option);
   });
-}
+};
 //episode selector
 function fillShowsSelector(allShows) {
   const showMenu = document.getElementById("show-menu");
@@ -324,7 +324,7 @@ function fillShowsSelector(allShows) {
     option.textContent = show.name;
     showMenu.appendChild(option);
   });
-}
+};
 
 // episode selector logic
 function setupSelector(allEpisodes) {
@@ -347,9 +347,9 @@ function setupSelector(allEpisodes) {
       );
       makePageForEpisodes(selectEpisode);
       updateCount(selectEpisode.length, allEpisodes.length);
-    }
+    };
   });
-}
+};
 
 // *** toggles
 //search UI box for shows
@@ -359,7 +359,7 @@ function showShowSearchUI() {
 
   document.getElementById("episode-search-container").style.display = "none";
   document.getElementById("episode-selector-container").style.display = "none";
-}
+};
 //search UI box for episodes
 function showEpisodeSearchUI() {
   document.getElementById("show-search-container").style.display = "none";
@@ -367,7 +367,7 @@ function showEpisodeSearchUI() {
 
   document.getElementById("episode-search-container").style.display = "block";
   document.getElementById("episode-selector-container").style.display = "block";
-}
+};
 
 //***Utility Functions
 //format S01 and E01
@@ -375,7 +375,7 @@ function makeSeasonAndEpisodes(episode) {
   const paddedSeason = episode.season.toString().padStart(2, "0");
   const paddedEpisode = episode.number.toString().padStart(2, "0");
   return `S${paddedSeason}E${paddedEpisode}`;
-}
+};
 
 // adds read-more toggle
 function addReadMoreToggle(summaryElement) {
@@ -396,4 +396,4 @@ function addReadMoreToggle(summaryElement) {
 
     summaryElement.insertAdjacentElement("afterend", toggle);
   });
-}
+};
