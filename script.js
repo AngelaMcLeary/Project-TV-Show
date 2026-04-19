@@ -107,8 +107,7 @@ function renderBreadcrumb(parts) {
 
     if (index < parts.length - 1) {
       const separator = document.createElement("span");
-      //find an arrow code from ascii??
-      separator.textContent = " > ";
+      separator.textContent = "›";
       breadcrumb.appendChild(separator);
     }
   });
