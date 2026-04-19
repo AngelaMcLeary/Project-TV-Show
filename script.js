@@ -431,6 +431,7 @@ function addReadMoreToggle(summaryElement) {
     toggle.textContent = "Read more";
 
     toggle.addEventListener("click", () => {
+      event.stopPropagation();
       const expanded = summaryElement.classList.toggle("expanded");
       toggle.textContent = expanded ? "Read less" : "Read more";
     });
