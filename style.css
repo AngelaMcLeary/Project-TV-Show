@@ -47,6 +47,16 @@ body {
   text-decoration: underline;
 }
 
+.searchbar input,
+.searchbar select {
+  height: 40px;
+  padding: 0 12px;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  border: 1px solid #949292;
+  box-sizing: border-box;
+}
+
 .message-container {
   display: flex;
   justify-content: center;
@@ -54,10 +64,6 @@ body {
   height: 50vh;
   color: #555;
   font-style: italic;
-}
-
-#count-info {
-  display: none;
 }
 
 /* heading */
@@ -82,21 +88,29 @@ h1 {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
-/* Inputs + dropdown */
-.select {
-  padding: 8px 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+/* Make inputs + selects identical */
+.searchbar input,
+.searchbar select {
+  height: 40px;
+  padding: 0 12px;
   font-size: 0.9rem;
+  border-radius: 8px;
+  border: 1px solid #949292;
+  box-sizing: border-box;
+  background: #fafafa;
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease;
 }
 
-select:hover {
+/* Hover + focus */
+.searchbar select:hover,
+.searchbar input:hover {
   border-color: #999;
 }
-.select:focus {
+
+.searchbar select:focus,
+.searchbar input:focus {
   outline: none;
   border-color: #4a90e2;
   box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.15);
@@ -106,6 +120,7 @@ select:hover {
 #count-info {
   font-size: 0.85rem;
   color: #666;
+   display: none;
 }
 
 /*Episode Card */
@@ -114,7 +129,9 @@ select:hover {
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
   cursor: pointer;
 }
 
@@ -200,7 +217,9 @@ select:hover {
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
   cursor: pointer;
   display: flex;
   flex-direction: column;
