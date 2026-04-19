@@ -55,17 +55,16 @@ async function fetchDisplayEpisodes(showId) {
   const rootElem = document.getElementById("root");
 
   // get show details first
-  let show;
-  
-  if show(showDetailsCache[showId]){
-    show = showDetailsCache[showId];
-  }else{
-    const showResponse = await fetch(`https://api.tvmaze.com/shows/${showId}`);
+  // get show details with caching
+let show;
+
+if (showDetailsCache[showId]) {
+  show = showDetailsCache[showId];
+} else {
+  const showResponse = await fetch(`https://api.tvmaze.com/shows/${showId}`);
   show = await showResponse.json();
   showDetailsCache[showId] = show;
-  }
-
-
+}
   //render breadcrumbs for show,name
   renderBreadcrumb([
     {
