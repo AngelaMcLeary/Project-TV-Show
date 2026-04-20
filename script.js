@@ -35,6 +35,48 @@ async function setup() {
     console.error("Fetch error:", error);
   };
 };
+// setup breadcrumb to use html
+function setEpisodesBreadcrumb() {
+  const breadcrumb = document.getElementById("breadcrumb");
+  breadcrumb.innerHTML = `
+    <span id="breadcrumb-home" class="breadcrumb-link">
+      <i class="fa-solid fa-house"></i>
+      Home
+    </span>
+    <span class="breadcrumb-separator">›</span>
+    <span id="breadcrumb-shows" class="breadcrumb-link">Shows</span>
+    <span class="breadcrumb-separator">›</span>
+    <span class="breadcrumb-current">Episodes</span>
+  `;
+
+  // Reattach click handlers after replacing HTML
+  document.getElementById("breadcrumb-home").addEventListener("click", () => {
+    makePageForShows(allShows);
+  });
+
+  document.getElementById("breadcrumb-shows").addEventListener("click", () => {
+    makePageForShows(allShows);
+  });
+};
+
+function setShowsBreadcrumb() {
+  const breadcrumb = document.getElementById("breadcrumb");
+  breadcrumb.innerHTML = `
+    <span id="breadcrumb-home" class="breadcrumb-link">
+      <i class="fa-solid fa-house"></i>
+      Home
+    </span>
+    <span class="breadcrumb-separator">›</span>
+    <span id="breadcrumb-shows" class="breadcrumb-current">Shows</span>
+  `;
+
+  // Reattach click handlers
+  document.getElementById("breadcrumb-home").addEventListener("click", () => {
+    makePageForShows(allShows);
+    setShowsBreadcrumb();
+  });
+}
+
 
 //fetching functions
 //load show details and episodes with caching
@@ -49,25 +91,8 @@ async function fetchDisplayEpisodes(showId) {
     show = await showResponse.json();
     showDetailsCache[showId] = show;
   };
-  renderBreadcrumb([
-    {
-      label: "Shows",
-      clickable: true,
-      onClick: () => {
-        makePageForShows(allShows);
-      },
-    },
-    {
-      label: show.name,
-      clickable: true,
-      onClick: () => fetchDisplayEpisodes(showId),
-    },
-    {
-      label: "Episodes",
-      clickable: false,
-    },
-  ]);
-
+  setEpisodesBreadcrumb();
+  
   if (episodesCache[showId]) {
     renderShowData(episodesCache[showId]);
     return;
@@ -90,31 +115,13 @@ async function fetchDisplayEpisodes(showId) {
   };
 };
 
+
+
+
 //rendering functions
-// ?? render breadcrumbs
-function renderBreadcrumb(parts) {
-  const breadcrumb = document.getElementById("breadcrumb");
-  breadcrumb.innerHTML = "";
-
-  parts.forEach((part, index) => {
-    const span = document.createElement("span");
-
-    span.textContent = part.label;
-    if (part.clickable) span.classList.add("breadcrumb-link");
-    if (part.onClick) span.addEventListener("click", part.onClick);
-    
-    breadcrumb.appendChild(span);
-
-    if (index < parts.length - 1) {
-      const separator = document.createElement("span");
-      separator.textContent = "›";
-      breadcrumb.appendChild(separator);
-    };
-  });
-};
-
 //renders the list of shows
 function makePageForShows(allShows) {
+  setShowsBreadcrumb();
   showShowSearchUI();
   const countDisplay = document.getElementById("count-info");
   if (countDisplay) {
@@ -128,7 +135,6 @@ function makePageForShows(allShows) {
   const showMenu = document.getElementById("show-menu");
   if (showMenu) showMenu.value = "";
 
-  renderBreadcrumb([{ label: "Shows", clickable: false }]);
   const root = document.getElementById("root");
   root.innerHTML = "";
 

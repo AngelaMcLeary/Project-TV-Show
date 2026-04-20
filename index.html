@@ -4,24 +4,32 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TV Show Project | Angela McLeary (AngelaMcLeary)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="style.css" rel="stylesheet" />
+    
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   </head>
 
   <body>
     <header>
-      <h1>TV Show Project</h1>
+      <h1><i class="fa-solid fa-house"></i>
+TV Show Project</h1>
+
+      <div id="breadcrumb">
+    <span id="breadcrumb-home" class="breadcrumb-link">
+        <i class="fa-solid fa-house"></i>
+        Home
+    </span>
+    <span class="breadcrumb-separator">›</span>
+    <span id="breadcrumb-shows" class="breadcrumb-link">Shows</span>
+</div>
 
       <nav class="searchbar">
-            <div class="breadcrumb" id="breadcrumb"></div>
-        <!-- searchbar -->
-        <!-- show search -->
         <div id="show-search-container" class="select">
           <label for="show-search">Search Shows</label>
           <input type="text" id="show-search" placeholder="Search shows..." />
         </div>
-        <!-- episode search -->
-        <!-- update styling -->
+
         <div id="episode-search-container" class="select hidden">
           <label for="episode-search">Search Episodes</label>
           <input

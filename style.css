@@ -22,12 +22,18 @@ body {
 }
 
 #breadcrumb {
-  margin: 20px;
-  font-size: 1rem;
-  color: #444;
   display: flex;
+  /* justify-content: flex-start; */
   align-items: center;
   gap: 6px;
+  width: 100%;
+  margin: 10px 20px 5px;
+  /* margin: 20px; */
+  padding-left: 10px;
+  font-size: 0.9rem;
+  color: #444;
+  gap: 6px;
+  opacity: 0.85;
 }
 
 #breadcrumb span {
@@ -36,6 +42,9 @@ body {
 }
 
 .breadcrumb-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   color: #0077cc;
   cursor: pointer;
   text-decoration: none;
@@ -45,6 +54,27 @@ body {
 .breadcrumb-link:hover {
   color: #005fa3;
   text-decoration: underline;
+}
+
+.breadcrumb-link i {
+  font-size: 0.9rem;
+  color: #777;
+  position: relative;
+  top: 1px; /* optical alignment */
+}
+
+.breadcrumb-link:hover {
+  color: #0077cc;
+}
+
+.breadcrumb-separator {
+  color: #aaa;
+  font-size: 0.8rem;
+}
+
+.breadcrumb-current {
+  color: #555;
+  font-weight: 500;
 }
 
 .searchbar input,
