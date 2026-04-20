@@ -7,7 +7,6 @@ let allShows = [];
 window.onload = setup;
 
 //initial setup
-// loads all shows, sorts them and set's up UI
 async function setup() {
   const rootElem = document.getElementById("root");
   const showMenu = document.getElementById("show-menu");
@@ -49,7 +48,6 @@ function setEpisodesBreadcrumb() {
     <span class="breadcrumb-current">Episodes</span>
   `;
 
-  // Reattach click handlers after replacing HTML
   document.getElementById("breadcrumb-home").addEventListener("click", () => {
     makePageForShows(allShows);
   });
@@ -70,7 +68,6 @@ function setShowsBreadcrumb() {
     <span id="breadcrumb-shows" class="breadcrumb-current">Shows</span>
   `;
 
-  // Reattach click handlers
   document.getElementById("breadcrumb-home").addEventListener("click", () => {
     makePageForShows(allShows);
     setShowsBreadcrumb();
