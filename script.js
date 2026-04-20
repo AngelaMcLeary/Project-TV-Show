@@ -36,12 +36,12 @@ function setEpisodesBreadcrumb() {
   const breadcrumb = document.getElementById("breadcrumb");
   breadcrumb.innerHTML = `
     <span id="breadcrumb-home" class="breadcrumb-link">
-      <i class="fa-solid fa-house"></i>
+      <img src="icons/home-icon-dark.png" alt="" class="home-icon">
       Home
     </span>
-    <span class="breadcrumb-separator">›</span>
+    <span class="breadcrumb-separator">></span>
     <span id="breadcrumb-shows" class="breadcrumb-link">Shows</span>
-    <span class="breadcrumb-separator">›</span>
+    <span class="breadcrumb-separator">></span>
     <span class="breadcrumb-current">Episodes</span>
   `;
 
@@ -58,10 +58,10 @@ function setShowsBreadcrumb() {
   const breadcrumb = document.getElementById("breadcrumb");
   breadcrumb.innerHTML = `
     <span id="breadcrumb-home" class="breadcrumb-link">
-      <i class="fa-solid fa-house"></i>
+      <img src="icons/home-icon-dark.png" alt="" class="home-icon">
       Home
     </span>
-    <span class="breadcrumb-separator">›</span>
+    <span class="breadcrumb-separator">></span>
     <span id="breadcrumb-shows" class="breadcrumb-current">Shows</span>
   `;
 

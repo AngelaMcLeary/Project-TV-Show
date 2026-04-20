@@ -19,6 +19,21 @@ body {
   align-items: start;
 }
 
+.tv-icon {
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.home-icon {
+  fill: blue;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
 #breadcrumb {
   display: flex;
   /* justify-content: flex-start; */
@@ -61,7 +76,6 @@ body {
   top: 1px;
 }
 
-
 .breadcrumb-separator {
   color: #767676;
   font-size: 0.8rem;
@@ -101,7 +115,7 @@ h1 {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
-.label{
+.label {
   margin: 5px;
 }
 
@@ -111,7 +125,7 @@ h1 {
   padding: 0 12px;
   font-size: 0.9rem;
   border-radius: 8px;
-  border: 1px solid #6F6F6F;
+  border: 1px solid #6f6f6f;
   box-sizing: border-box;
   background: #fafafa;
   transition:
@@ -119,9 +133,13 @@ h1 {
     box-shadow 0.2s ease;
 }
 
+.searchbar input {
+  min-width: 150px;
+}
+
 .searchbar select:hover,
 .searchbar input:hover {
-  border-color: #6E6E6E;
+  border-color: #6e6e6e;
 }
 
 .searchbar select:focus,
