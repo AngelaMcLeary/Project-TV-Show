@@ -4,25 +4,27 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TV Show Project | Angela McLeary (AngelaMcLeary)</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
     <link href="style.css" rel="stylesheet" />
-    
+
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   </head>
 
   <body>
     <header>
-      <h1><i class="fa-solid fa-tv"></i>
-TV Show Project</h1>
+      <h1><i class="fa-solid fa-tv"></i> TV Show Project</h1>
 
       <div id="breadcrumb">
-    <span id="breadcrumb-home" class="breadcrumb-link">
-        <i class="fa-solid fa-house"></i>
-        Home
-    </span>
-    <span class="breadcrumb-separator">›</span>
-    <span id="breadcrumb-shows" class="breadcrumb-link">Shows</span>
-</div>
+        <span id="breadcrumb-home" class="breadcrumb-link">
+          <i class="fa-solid fa-house"></i>
+          Home
+        </span>
+        <span class="breadcrumb-separator">›</span>
+        <span id="breadcrumb-shows" class="breadcrumb-link">Shows</span>
+      </div>
 
       <nav class="searchbar">
         <div id="show-search-container" class="select">
@@ -39,15 +41,13 @@ TV Show Project</h1>
           />
         </div>
 
-        <!-- dropdown to select show -->
         <div id="show-selector-container" class="select">
-          <label for="show-menu">Show:</label>
+          <label for="show-menu">Shows</label>
           <select id="show-menu" class="select">
             <option value="">All Shows</option>
           </select>
         </div>
 
-        <!-- dropdown to select episode -->
         <div id="episode-selector-container" class="select hidden">
           <label for="episodes-menu">Episode:</label>
           <select id="episodes-menu" class="select">
@@ -61,10 +61,6 @@ TV Show Project</h1>
     </header>
 
     <main id="root">
-      <!--       <div class="loading">
-        <div class="spinner"></div>
-        <p>Loading episodes… please wait.</p>
-      </div> -->
     </main>
     <!-- Loads a provided function called getAllEpisodes() which returns all episodes -->
     <footer>
