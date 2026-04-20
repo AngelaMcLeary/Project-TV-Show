@@ -36,12 +36,10 @@ body {
 
 #breadcrumb {
   display: flex;
-  /* justify-content: flex-start; */
   align-items: center;
   gap: 6px;
   width: 100%;
   margin: 10px 20px 5px;
-  /* margin: 20px; */
   padding-left: 10px;
   font-size: 0.9rem;
   color: #444;
@@ -195,8 +193,8 @@ h1 {
   color: #555;
   margin: 0 13px 20px;
   line-height: 1.4;
-  max-height: 90px; /* clamp height */
-  overflow: hidden; /* hide overflow */
+  max-height: 90px;
+  overflow: hidden;
   position: relative;
   transition: max-height 0.3s ease;
 }
@@ -248,6 +246,7 @@ h1 {
   display: flex;
   flex-direction: column;
 }
+
 .show-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15);
@@ -262,6 +261,7 @@ h1 {
   height: 2.6em; /* 2 lines */
   overflow: hidden;
 }
+
 .show-card img {
   width: 100%;
   aspect-ratio: 16 / 9;
