@@ -32,7 +32,7 @@ async function setup() {
   }
 }
 
-function setEpisodesBreadcrumb() {
+function setEpisodesBreadcrumb(show) {
   const breadcrumb = document.getElementById("breadcrumb");
   breadcrumb.innerHTML = `
     <span id="breadcrumb-home" class="breadcrumb-link">
@@ -41,6 +41,8 @@ function setEpisodesBreadcrumb() {
     </span>
     <span class="breadcrumb-separator">></span>
     <span id="breadcrumb-shows" class="breadcrumb-link">Shows</span>
+    <span class="breadcrumb-separator">></span>
+    <span id="breadcrumb-show-name" class="breadcrumb-link">${show.name}</span>
     <span class="breadcrumb-separator">></span>
     <span class="breadcrumb-current">Episodes</span>
   `;
@@ -82,7 +84,7 @@ async function fetchDisplayEpisodes(showId) {
     show = await showResponse.json();
     showDetailsCache[showId] = show;
   }
-  setEpisodesBreadcrumb();
+  setEpisodesBreadcrumb(show);
 
   if (episodesCache[showId]) {
     renderShowData(episodesCache[showId]);
