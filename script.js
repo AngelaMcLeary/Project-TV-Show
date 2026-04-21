@@ -132,7 +132,7 @@ function makePageForShows(allShows) {
     image.src =
       show.image && show.image.medium
         ? show.image.medium
-        : "https://via.placeholder.com/210x295?text=No+Image";
+        : "https://static.tvmaze.com/images/no-img/no-img-portrait-text.png";
     image.alt = show.name;
     showCard.appendChild(image);
 
