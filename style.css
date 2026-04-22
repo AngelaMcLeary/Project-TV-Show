@@ -150,7 +150,9 @@ h1 {
 #count-info {
   font-size: 0.85rem;
   color: #666;
-  display: none;
+  display: block;
+  margin: 10px 0;  
+  
 }
 
 .episode-card {

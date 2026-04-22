@@ -112,11 +112,7 @@ function makePageForShows(allShows) {
   setShowsBreadcrumb();
   showShowSearchUI();
   const countDisplay = document.getElementById("count-info");
-  if (countDisplay) {
-    countDisplay.style.display = "none";
-    countDisplay.textContent = "";
-  }
-
+  
   const showSearch = document.getElementById("show-search");
   if (showSearch) showSearch.value = "";
 
