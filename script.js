@@ -39,11 +39,11 @@ function setEpisodesBreadcrumb(show) {
       <img src="icons/home-icon-dark.png" alt="" class="home-icon">
       Home
     </span>
-    <span class="breadcrumb-separator">></span>
+    <span class="breadcrumb-separator">&gt;</span>
     <span id="breadcrumb-shows" class="breadcrumb-link">Shows</span>
-    <span class="breadcrumb-separator">></span>
+    <span class="breadcrumb-separator">&gt;</span>
     <span id="breadcrumb-show-name" class="breadcrumb-link">${show.name}</span>
-    <span class="breadcrumb-separator">></span>
+    <span class="breadcrumb-separator">&gt;</span>
     <span class="breadcrumb-current">Episodes</span>
   `;
 
@@ -63,7 +63,7 @@ function setShowsBreadcrumb() {
       <img src="icons/home-icon-dark.png" alt="" class="home-icon">
       Home
     </span>
-    <span class="breadcrumb-separator">></span>
+    <span class="breadcrumb-separator">&gt;</span>
     <span id="breadcrumb-shows" class="breadcrumb-current">Shows</span>
   `;
 
@@ -269,7 +269,7 @@ function setupShowSearch(allShows) {
 
       return nameMatch || genreMatch || summaryMatch;
     });
-    
+
     const previousSearchValue = event.target.value;
     makePageForShows(filteredShows);
     document.getElementById("show-search").value = previousSearchValue; 
