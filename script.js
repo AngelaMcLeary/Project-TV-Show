@@ -269,8 +269,10 @@ function setupShowSearch(allShows) {
 
       return nameMatch || genreMatch || summaryMatch;
     });
-
+    
+    const previousSearchValue = event.target.value;
     makePageForShows(filteredShows);
+    document.getElementById("show-search").value = previousSearchValue; 
 
     countDisplay.textContent = `Displaying ${filteredShows.length} / ${total} shows`;
   });
